@@ -1,4 +1,5 @@
 gunicorn
+requests
 dash
 pandas 
 dash_bootstrap_components
