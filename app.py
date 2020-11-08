@@ -15,6 +15,7 @@ app = dash.Dash(__name__,
                             'content': 'width=device-width, initial-scale=1.0, maximum-scale=1.2, minimum-scale=0.5,'}]
                             )
 app.title = 'Землетрясения в Прибайкалье'
+server = app.server
 # ------------------------------------------------------------------------------
 # data 
 df = fetch_data()
