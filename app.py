@@ -31,7 +31,7 @@ app.layout = dbc.Container([
             dbc.Col(dbc.Button("Инструкция", id="open", color="info"),
                         xs=10, sm=5, md=5, lg=4, xl=4
                     ),
-            dbc.Col(html.H3("Землетресения в Прибайкалье"),
+            dbc.Col(html.H3("Землетрясения в Прибайкалье"),
                         xs=10, sm=5, md=5, lg=8, xl=8
                     ),
             ]),
