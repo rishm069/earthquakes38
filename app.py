@@ -41,12 +41,12 @@ app.layout = dbc.Container([
                         html.Span("На этой странице представлены данные о землетрясениях в Байкальском регионе. Все данные получены с "),
                         html.A("сайта БФ ФИЦ ЕГС РАН", href="http://seis-bykl.ru", target='_blank'),
                         html.Br(),
-                        html.A("Сообщить о проблеме", href="https://github.com/rishm069", target='_blank'),
+                        html.A("Сообщить о проблеме", href="https://github.com/rishm069/earthquakes38", target='_blank'),
                         html.Br(),
                         dbc.ListGroup([
                                     dbc.ListGroupItem([
                                                     dbc.ListGroupItemHeading("Селектор"),
-                                                    dbc.ListGroupItemText("Селектор позволяет выбрать отображение на карте всех землетрясений за текущий год ('Землетрясения за текущий год') или только последнего землетрясения ('Последнее землетрясение'). Позже будут добавлены исторические данные"),
+                                                    dbc.ListGroupItemText("Селектор позволяет выбрать отображение на карте всех землетрясений за текущий год ('Землетрясения за текущий год'), только последнего землетрясения ('Последнее землетрясение') или все землетрясения с 1994 года ('Исторические данные')"),
                                                     ]
                                                     ),
                                     dbc.ListGroupItem([
@@ -93,8 +93,8 @@ app.layout = dbc.Container([
         id='dropdown',
         options=[
             {'label': 'Землетрясения за текущий год', 'value': 'current'},
-            {'label': 'Последнее землетрясение', 'value': 'latest'} #,
-            #{'label': 'Исторические данные', 'value': 'history'}
+            {'label': 'Последнее землетрясение', 'value': 'latest'},
+            {'label': 'Исторические данные', 'value': 'history'}
         ],
         value='current'
     ),
@@ -129,6 +129,12 @@ def update_data_table(dropdown):
     dff = df
     if dropdown == 'latest':
         dff = df.head(1)
+    if dropdown == 'history':
+        dfh = pd.read_csv(r'historical_data.csv')
+        dfh = dfh.append(df)
+        dfh.drop_duplicates(keep="first", inplace=True)
+        dfh.to_csv(r'historical_data.csv', index=False)
+        dff = dfh
     return [
         dash_table.DataTable(
         id='datatable-interactivity',
@@ -162,10 +168,8 @@ def update_map(all_rows_data, slctd_row_indices, dropdown_input):
     if len(slctd_row_indices) == 0:
         dff = pd.DataFrame(all_rows_data)
         dff.drop_duplicates(keep="first", inplace=True)
-        print('it is empty')
     else:
         sl_list = [all_rows_data[n] for n in slctd_row_indices]
-        print(sl_list)
         dff = pd.DataFrame(sl_list)
 
     return [
